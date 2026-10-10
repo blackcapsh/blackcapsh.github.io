@@ -1,0 +1,665 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101110">
+  <meta name="description" content="blackcapsh — Linux, Unix, infrastructure, virtualization, automation and continuous learning.">
+  <meta name="author" content="blackcapsh">
+  <meta property="og:title" content="blackcapsh — Systems & Infrastructure">
+  <meta property="og:description" content="Discover. Explore. Test. Learn. Repeat.">
+  <meta property="og:type" content="website">
+
+  <title>blackcapsh — Systems & Infrastructure</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101110;
+      --panel: #151715;
+      --panel-hover: #1b1e1b;
+      --text: #e7e9e5;
+      --muted: #858b82;
+      --line: #30352f;
+      --accent: #c4f06a;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono",
+              "Courier New", monospace;
+      --sans: Inter, -apple-system, BlinkMacSystemFont,
+              "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 80% 0%, #252c211f, transparent 45%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 5px;
+    }
+
+    .container {
+      width: min(100% - 44px, 1000px);
+      margin-inline: auto;
+    }
+
+    .mono { font-family: var(--mono); }
+
+    .muted { color: var(--muted); }
+
+    .accent { color: var(--accent); }
+
+    header {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      font: 700 17px var(--mono);
+      letter-spacing: -1px;
+    }
+
+    .brand span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      font: 12px var(--mono);
+      color: var(--muted);
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .hero {
+      padding-block: 110px 90px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--accent);
+      font: 12px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px #c4f06a55;
+    }
+
+    h1 {
+      margin: 25px 0 18px;
+      font-size: clamp(48px, 10vw, 94px);
+      letter-spacing: -0.085em;
+      line-height: 1.04;
+      font-weight: 750;
+    }
+
+    h1 .cursor {
+      color: var(--accent);
+      font-weight: 400;
+      animation: blink 1.2s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      to { visibility: hidden; }
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      color: #a8aea4;
+      font-size: clamp(16px, 2vw, 19px);
+    }
+
+    .hero-copy strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 45px;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      font: 12px var(--mono);
+      transition: .2s ease;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: #11140c;
+      border-color: var(--accent);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    .button.secondary:hover { color: var(--accent); }
+
+    .terminal {
+      margin-top: 60px;
+      max-width: 650px;
+      background: #0c0d0c;
+      border: 1px solid var(--line);
+      font: 12px/1.9 var(--mono);
+    }
+
+    .terminal-bar {
+      display: flex;
+      gap: 6px;
+      padding: 12px 15px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .terminal-bar .circle {
+      width: 7px;
+      height: 7px;
+      margin-top: 6px;
+      border-radius: 50%;
+      background: #4a5048;
+    }
+
+    .terminal-content { padding: 18px; }
+
+    .terminal-content p { margin: 3px 0; }
+
+    .prompt { color: var(--accent); }
+
+    section {
+      padding-block: 76px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+
+    .section-number {
+      font: 12px var(--mono);
+      color: var(--accent);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 25px;
+      letter-spacing: -1px;
+    }
+
+    .section-intro {
+      max-width: 640px;
+      margin: -12px 0 30px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      padding: 23px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      transition: background .2s, border-color .2s;
+    }
+
+    .card:hover {
+      background: var(--panel-hover);
+      border-color: #59624e;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .card-icon {
+      font: 12px var(--mono);
+      color: var(--accent);
+    }
+
+    .card-index {
+      color: #555d52;
+      font: 11px var(--mono);
+    }
+
+    h3 {
+      margin: 18px 0 8px;
+      font-size: 17px;
+      letter-spacing: -.3px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 18px;
+    }
+
+    .tag {
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      color: #b2b8ad;
+      font: 10px var(--mono);
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .skill {
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      font: 12px var(--mono);
+      color: #cbd0c6;
+    }
+
+    .skill::before {
+      content: "+ ";
+      color: var(--accent);
+    }
+
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .about p {
+      margin-top: 0;
+      color: #a8aea4;
+      font-size: 14px;
+    }
+
+    .principle {
+      padding: 23px;
+      border-left: 2px solid var(--accent);
+      background: var(--panel);
+      font: 14px/2 var(--mono);
+    }
+
+    .contact-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .contact-panel h3 { margin-top: 0; }
+
+    .contact-panel p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer {
+      padding-block: 25px;
+      color: var(--muted);
+      font: 11px var(--mono);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .back-top { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      .container { width: min(100% - 32px, 1000px); }
+
+      .nav { min-height: 65px; }
+
+      .nav-links { gap: 12px; font-size: 10px; }
+
+      .hero { padding-block: 80px 65px; }
+
+      .terminal { margin-top: 42px; }
+
+      section { padding-block: 58px; }
+
+      .grid, .about { grid-template-columns: 1fr; }
+
+      .about { gap: 20px; }
+
+      .contact-panel {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 23px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body id="top">
+
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#top">blackcapsh<span>.</span></a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#expertise">EXPERTISE</a>
+        <a href="#stack">STACK</a>
+        <a href="#about">ABOUT</a>
+        <a href="#contact">CONTACT</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          Systems / Infrastructure / Engineering
+        </div>
+
+        <h1>blackcapsh<span class="cursor">_</span></h1>
+
+        <p class="hero-copy">
+          <strong>Linux & Unix engineer. Systems administrator.
+          Infrastructure enthusiast.</strong>
+          <br>
+          Building, operating, troubleshooting and learning from
+          complex systems. From bare metal to virtualization,
+          storage and cloud infrastructure.
+        </p>
+
+        <div class="hero-actions">
+          <a class="button primary"
+             href="https://github.com/blackcapsh"
+             target="_blank" rel="noopener noreferrer">
+            &gt; Explore GitHub ↗
+          </a>
+
+          <a class="button secondary" href="#expertise">
+            Discover my work ↓
+          </a>
+        </div>
+
+        <div class="terminal" aria-label="Terminal introduction">
+          <div class="terminal-bar">
+            <span class="circle"></span>
+            <span class="circle"></span>
+            <span class="circle"></span>
+            <span style="margin-left:8px">blackcapsh@localhost: ~</span>
+          </div>
+
+          <div class="terminal-content">
+            <p><span class="prompt">blackcapsh@localhost:~$</span> whoami</p>
+            <p>systems_engineer</p>
+            <p><span class="prompt">blackcapsh@localhost:~$</span> cat philosophy.txt</p>
+            <p class="accent">discover. explore. test. learn. repeat.</p>
+            <p><span class="prompt">blackcapsh@localhost:~$</span> <span class="cursor">_</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="expertise">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-number">01 /</span>
+          <h2>Areas of expertise</h2>
+        </div>
+
+        <p class="section-intro">
+          The infrastructure layers I work with, from operating
+          systems and compute to data protection and automation.
+        </p>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-top">
+              <span class="card-icon">[ SYS ]</span>
+              <span class="card-index">01</span>
+            </div>
+            <h3>Linux & Unix Systems</h3>
+            <p>
+              Administration, troubleshooting, performance
+              analysis, hardening and lifecycle management.
+            </p>
+            <div class="tags">
+              <span class="tag">GNU/Linux</span>
+              <span class="tag">Unix</span>
+              <span class="tag">Windows Server</span>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="card-icon">[ VM ]</span>
+              <span class="card-index">02</span>
+            </div>
+            <h3>Virtualization & Compute</h3>
+            <p>
+              Virtual infrastructure, cluster operations,
+              capacity planning and production environments.
+            </p>
+            <div class="tags">
+              <span class="tag">Nutanix</span>
+              <span class="tag">VMware</span>
+              <span class="tag">Bare Metal</span>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="card-icon">[ DAT ]</span>
+              <span class="card-index">03</span>
+            </div>
+            <h3>Storage & Data Protection</h3>
+            <p>
+              Storage architecture, file services, object storage,
+              backup strategy and recovery planning.
+            </p>
+            <div class="tags">
+              <span class="tag">NFS</span>
+              <span class="tag">S3</span>
+              <span class="tag">Backups</span>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="card-icon">[ DB ]</span>
+              <span class="card-index">04</span>
+            </div>
+            <h3>Databases & Cloud</h3>
+            <p>
+              Database infrastructure, cloud platforms,
+              service integration and operational reliability.
+            </p>
+            <div class="tags">
+              <span class="tag">Nutanix NDB</span>
+              <span class="tag">OCI</span>
+              <span class="tag">AWS / Azure / GCP</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="stack">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-number">02 /</span>
+          <h2>Technology stack</h2>
+        </div>
+
+        <p class="section-intro">
+          Tools, platforms and technologies I use or explore.
+        </p>
+
+        <div class="skills">
+          <span class="skill">Linux</span>
+          <span class="skill">Debian</span>
+          <span class="skill">Ubuntu</span>
+          <span class="skill">Rocky Linux</span>
+          <span class="skill">Fedora</span>
+          <span class="skill">Bash</span>
+          <span class="skill">Python</span>
+          <span class="skill">Git</span>
+          <span class="skill">Nutanix AHV</span>
+          <span class="skill">VMware</span>
+          <span class="skill">Nutanix NDB</span>
+          <span class="skill">Nutanix Objects</span>
+          <span class="skill">NFS</span>
+          <span class="skill">S3 Storage</span>
+          <span class="skill">Oracle Cloud</span>
+          <span class="skill">AWS</span>
+          <span class="skill">Azure</span>
+          <span class="skill">Google Cloud</span>
+          <span class="skill">Automation</span>
+          <span class="skill">Data Center</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-number">03 /</span>
+          <h2>Beyond operations</h2>
+        </div>
+
+        <div class="about">
+          <div>
+            <p>
+              I enjoy understanding how things work, solving
+              infrastructure problems and experimenting with
+              technology. My interests extend beyond system
+              administration into programming, automation,
+              data analysis and self-hosted services.
+            </p>
+            <p>
+              I believe reliable systems are built through
+              curiosity, documentation, careful testing and
+              continuous improvement.
+            </p>
+          </div>
+
+          <div class="principle">
+            <div><span class="muted">$</span> discover</div>
+            <div><span class="muted">$</span> explore</div>
+            <div><span class="muted">$</span> test</div>
+            <div><span class="muted">$</span> learn</div>
+            <div class="accent">$ repeat</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-number">04 /</span>
+          <h2>Find me online</h2>
+        </div>
+
+        <div class="contact-panel">
+          <div>
+            <h3>Let's connect.</h3>
+            <p>
+              Explore my repositories, experiments and projects.
+            </p>
+          </div>
+
+          <a class="button primary"
+             href="https://github.com/blackcapsh"
+             target="_blank" rel="noopener noreferrer">
+            GitHub profile ↗
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> blackcapsh</span>
+      <span>Built with HTML & CSS. No frameworks.</span>
+      <a class="back-top" href="#top">[ BACK TO TOP ↑ ]</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+  </script>
+
+</body>
+</html>
